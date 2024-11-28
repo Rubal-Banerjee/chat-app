@@ -14,10 +14,41 @@ datasource db {
 }
 
 model User {
-  id             String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  fullName       String
-  userName       String  @unique
-  password       String
-  gender         String
-  profilePicture String?
+  id              String         @id @default(cuid())
+  fullName        String
+  userName        String         @unique
+  password        String
+  gender          Gender
+  profilePicture  String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  conversationIds String[]
+  conversations   Conversation[]
+  messages        Message[]
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  message        String
+  senderId       String
+  sender         User         @relation(fields: [senderId], references: [id])
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model Conversation {
+  id             String    @id @default(cuid())
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  participantIds String[]
+  participants   User[]
+  messageIds     String[]
+  messages       Message[]
+}
+
+enum Gender {
+  male
+  female
 }
