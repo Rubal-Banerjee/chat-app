@@ -14,7 +14,10 @@
     "./signup-form": "./src/Signup-Form.tsx",
     "./sidebar": "./src/SideBar.tsx",
     "./message-container": "./src/MessageContainer.tsx",
-    "./searchbar": "./src/SearchBar.tsx"
+    "./searchbar": "./src/SearchBar.tsx",
+    "./userAuth": "./src/zustand/userAuth.ts",
+    "./userConversations": "./src/zustand/userConversations.ts",
+    "./isLoading": "./src/zustand/isLoading.ts"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
@@ -39,7 +42,12 @@
     "typescript": "5.5.4"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.9.1",
+    "axios": "^1.7.8",
     "react": "^18.2.0",
-    "react-icons": "^5.3.0"
+    "react-hook-form": "^7.53.2",
+    "react-icons": "^5.3.0",
+    "react-router-dom": "^6.28.0",
+    "zustand": "^5.0.1"
   }
 }

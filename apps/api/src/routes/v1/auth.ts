@@ -4,8 +4,37 @@ import { client } from "@repo/db/client";
 import jwt from "jsonwebtoken";
 import { jwtSecreat } from "../../config";
 import { compare, hash } from "../../scrypt";
+import { authMiddleware } from "../../middleware";
 
 const authRouter = Router();
+
+authRouter.get("/me", authMiddleware, async (req, res) => {
+  try {
+    const user = await client.user.findUnique({
+      where: {
+        id: req.userId!,
+      },
+    });
+
+    if (!user) {
+      res.status(400).json({
+        message: "User does not exists",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      id: user.id,
+      fullName: user.fullName,
+      userName: user.userName,
+      profilePicture: user.profilePicture,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "Invalid credentials",
+    });
+  }
+});
 
 authRouter.post("/signup", async (req, res) => {
   const parsedSingupInput = SignupSchema.safeParse(req.body);
@@ -53,7 +82,6 @@ authRouter.post("/signup", async (req, res) => {
     });
 
     res.status(200).json({
-      message: "Signup successful",
       id: user.id,
       fullName: user.fullName,
       userName: user.userName,
@@ -123,7 +151,6 @@ authRouter.post("/signin", async (req, res) => {
     });
 
     res.status(200).json({
-      message: "Signin successfull",
       id: user.id,
       fullName: user.fullName,
       userName: user.userName,
@@ -134,7 +161,7 @@ authRouter.post("/signin", async (req, res) => {
   }
 });
 
-authRouter.post("/signout", (req, res) => {
+authRouter.get("/signout", (req, res) => {
   res.cookie("jwt", "", {
     maxAge: 0,
   });

@@ -121,10 +121,7 @@ messageRouter.post("/send/:id", authMiddleware, async (req, res) => {
 
     // WebSocket will go here
 
-    res.status(201).json({
-      message: "Message sent successfully",
-      payload: messageSent.message,
-    });
+    res.status(201).json(messageSent);
   } catch (error) {
     console.log("Database error: ", error);
   }

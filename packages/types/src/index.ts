@@ -5,7 +5,7 @@ export const SignupSchema = z
     fullName: z
       .string()
       .min(4, { message: "Your full name must be atleast 4 characters long" }),
-    userName: z.string(),
+    userName: z.string().min(1, { message: "Your must enter an username" }),
     password: z
       .string()
       .min(8, { message: "Your password must be atleast 8 characters long" })
@@ -17,7 +17,7 @@ export const SignupSchema = z
         "Password should contain only alphabets and numbers"
       ),
     confirmPassword: z.string(),
-    gender: z.enum(["male", "female"]),
+    gender: z.enum(["male", "female"], { message: "Gender is required" }),
   })
   .refine((schema) => schema.password === schema.confirmPassword, {
     message: "Password do not match",
@@ -25,7 +25,7 @@ export const SignupSchema = z
   });
 
 export const SigninSchema = z.object({
-  userName: z.string(),
+  userName: z.string().min(1, { message: "Your must enter an username" }),
   password: z
     .string()
     .min(8, { message: "Your password must be atleast 8 characters long" })
@@ -37,3 +37,7 @@ export const SigninSchema = z.object({
       "Password should contain only alphabets and numbers"
     ),
 });
+
+export type SignupType = z.infer<typeof SignupSchema>;
+
+export type SigninType = z.infer<typeof SigninSchema>;
